@@ -1,7 +1,7 @@
 "use client";
 
 import ContentCutTwoToneIcon from "@mui/icons-material/ContentCutTwoTone";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -14,25 +14,20 @@ import OpenInNewOutlined from "@mui/icons-material/OpenInNewOutlined";
 import QrCode2Outlined from "@mui/icons-material/QrCode2Outlined";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
 
+const urlSchema = z.url();
+
 export default function Home() {
   const { shortUrl, isLoading, newUrl } = useShortUrl();
   const [url, setUrl] = useState("");
-  const [mounted, setMounted] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
-  const [customSlug, setCustomSlug] = useState("");
   const { data: session } = useSession();
   const lastSubmittedRef = useRef("");
-  const urlSchema = z.url();
-const isValidUrl = useMemo(
-  () => urlSchema.safeParse(url.trim()).success,
-  [url]
-);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const isValidUrl = useMemo(
+    () => urlSchema.safeParse(url.trim()).success,
+    [url]
+  );
 
-  const submitDisabled =
-  !mounted || isLoading || !isValidUrl;
+  const submitDisabled = isLoading || !isValidUrl;
 
   
   const submittingRef = useRef(false);
@@ -67,7 +62,7 @@ const isValidUrl = useMemo(
         lastSubmittedRef.current = trimmedUrl;
   
       await shortUrl(trimmedUrl);
-    } catch (error) {
+    } catch {
       lastSubmittedRef.current = "";
       toast.error("Failed to shorten URL");
     } finally {
@@ -91,38 +86,37 @@ const isValidUrl = useMemo(
 
           <div className="mx-auto flex max-w-2xl flex-col gap-3 rounded-xl border border-white/10 bg-slate-900/70 p-2 backdrop-blur-md md:flex-row">
             <input
+            autoFocus
               type="url"
               placeholder="Paste your long URL here..."
               value={url}
                 autoComplete="off"
               onChange={(e) => setUrl(e.target.value)}
-              className="h-12 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 text-sm text-slate-100 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-400"
+              className="  h-12 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 text-sm text-slate-100 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-400"
             />
-            {mounted && (
-              <Button
-                onClick={handleShorten}
-                
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleShorten();
-                  }
-                }}
-                disabled={submitDisabled}
-                className="h-12 rounded-lg bg-indigo-500 px-8 text-white hover:bg-indigo-400 cursor-pointer"
-              >
-                {isLoading ? (
-                  <>
-                    <Spinner className="size-4" />
-                    Shortening...
-                  </>
-                ) : (
-                  <>
-                    Shorten Now
-                    <ContentCutTwoToneIcon />
-                  </>
-                )}
-              </Button>
-            )}
+            <Button
+              onClick={handleShorten}
+              
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleShorten();
+                }
+              }}
+              disabled={submitDisabled}
+              className="h-12 rounded-lg bg-indigo-500 px-8 text-white hover:bg-indigo-400 cursor-pointer"
+            >
+              {isLoading ? (
+                <>
+                  <Spinner className="size-4" />
+                  Shortening...
+                </>
+              ) : (
+                <>
+                  Shorten Now
+                  <ContentCutTwoToneIcon />
+                </>
+              )}
+            </Button>
           </div>
           <div className="mt-6 w-full">
             {newUrl ? (

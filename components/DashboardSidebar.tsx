@@ -98,30 +98,32 @@ export default function DashboardSidebar({
         </nav>
 
         {/* User Section */}
-        <div className="p-4 border-t border-white/10">
-          <div
-            className={`flex items-center gap-3 p-3 ${isCollapsed ? "justify-center" : ""}`}
-          >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c0c1ff] to-indigo-500 flex items-center justify-center font-semibold flex-shrink-0">
-              {session?.user?.name?.[0] || "U"}
-            </div>
-            {!isCollapsed && (
-              <div className="truncate">
-                <p className="text-sm font-medium">{session?.user?.name}</p>
-                <p className="text-xs text-slate-500">{session?.user?.email}</p>
+        {session?.user && (
+          <div className="p-4 border-t border-white/10">
+            <div
+              className={`flex items-center gap-3 p-3 ${isCollapsed ? "justify-center" : ""}`}
+            >
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-[#c0c1ff] to-indigo-500 flex items-center justify-center font-semibold shrink-0">
+                {session.user.name?.[0] || "U"}
               </div>
-            )}
-          </div>
+              {!isCollapsed && (
+                <div className="truncate">
+                  <p className="text-sm font-medium">{session.user.name}</p>
+                  <p className="text-xs text-slate-500">{session.user.email}</p>
+                </div>
+              )}
+            </div>
 
-          <Button
-            variant="ghost"
-            className={`w-full text-red-400 hover:bg-red-950/30 hover:text-red-300 ${isCollapsed ? "justify-center" : "justify-start"}`}
-            onClick={() => signOut({ callbackUrl: "/" })}
-          >
-            <LogoutOutlined className={isCollapsed ? "" : "mr-3"} />
-            {!isCollapsed && "Logout"}
-          </Button>
-        </div>
+            <Button
+              variant="ghost"
+              className={`w-full text-red-400 hover:bg-red-950/30 hover:text-red-300 ${isCollapsed ? "justify-center" : "justify-start"}`}
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              <LogoutOutlined className={isCollapsed ? "" : "mr-3"} />
+              {!isCollapsed && "Logout"}
+            </Button>
+          </div>
+        )}
       </aside>
 
       {/* Main Content */}
