@@ -1,4 +1,5 @@
 # Shorten.it — URL Shortener
+https://shorten-it-nine.vercel.app
 
 A full-stack URL shortener built with **Next.js 16 App Router**, **PostgreSQL + Prisma**, and **Google OAuth**. Paste a long URL, get a short link, track clicks, and manage everything from a dashboard.
 
